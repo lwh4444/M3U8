@@ -15,6 +15,8 @@ import com.wenhaolei.m3u8.R
 import com.wenhaolei.m3u8.adapter.RecyclerViewVideoAdapter
 import com.wenhaolei.m3u8.utils.Utils
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer
+import hdl.com.lib.runtimepermissions.HPermissions
+import hdl.com.lib.runtimepermissions.PermissionsResultAction
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -29,9 +31,27 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         println(isNetworkConnected(this))
         println(Utils.URLList(this))
+        requestPermission()
         setUI()
         delData()
     }
+
+
+    private fun requestPermission() {
+        /*
+         * 请求所有必要的权限----
+         */
+        HPermissions.getInstance().requestAllManifestPermissionsIfNecessary(this, object : PermissionsResultAction() {
+            override fun onGranted() {
+
+            }
+
+            override fun onDenied(permission: String) {
+
+            }
+        })
+    }
+
 
     private fun delData() {
         mList = ArrayList()

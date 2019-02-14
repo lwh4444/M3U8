@@ -1,6 +1,7 @@
 package com.wenhaolei.m3u8.activity
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
@@ -40,6 +41,12 @@ class AddNewURLActivity : AppCompatActivity() {
             setResult(Activity.RESULT_OK)
             finish()
         }
+        download_btn.setOnClickListener {
+            val intent = Intent(this, DownloadingActivity::class.java)
+            intent.putExtra("url", Utils.URLList(this)[0])
+            startActivity(intent)
+        }
+
 
     }
 }

@@ -1,5 +1,6 @@
 package com.wenhaolei.tools;
 
+import android.annotation.SuppressLint;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -33,6 +34,16 @@ public class M3U8DownloadTask {
         this.taskId = taskId;
         //需要加上当前时间作为文件夹（由于合并时是根据文件夹来合并的，合并之后需要删除所有的ts文件，这里用到了多线程，所以需要按文件夹来存ts）
         tempDir += File.separator + System.currentTimeMillis() / (1000 * 60 * 60 * 24) + "-" + taskId;
+
+        File file = new File(tempDir);
+        try {
+            if (!file.exists()) {
+                file.mkdir();
+            }
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+
     }
 
     //临时下载目录
@@ -79,6 +90,7 @@ public class M3U8DownloadTask {
      */
     private Timer netSpeedTimer;
     private ExecutorService executor;//线程池
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -193,7 +205,7 @@ public class M3U8DownloadTask {
                                         public void run() {
                                             MUtils.clearDir(new File(tempDir));//清空一下临时文件
                                         }
-                                    }, 20 * 1000);//20s之后再删除
+                                    }, 5 * 1000);//20s之后再删除
                                 }
                                 mHandler.sendEmptyMessage(WHAT_ON_SUCCESS);
                                 isRunning = false;
