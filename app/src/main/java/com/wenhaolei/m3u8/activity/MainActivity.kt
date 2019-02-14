@@ -18,6 +18,9 @@ import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer
 import hdl.com.lib.runtimepermissions.HPermissions
 import hdl.com.lib.runtimepermissions.PermissionsResultAction
 import kotlinx.android.synthetic.main.activity_main.*
+import android.util.Log
+import com.wenhaolei.m3u8.bean.M3U8Params
+import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         println(isNetworkConnected(this))
         println(Utils.URLList(this))
+        println(getFilesAllName(M3U8Params.mp4Savepath))
+
         requestPermission()
         setUI()
         delData()
@@ -64,6 +69,9 @@ class MainActivity : AppCompatActivity() {
             beanMovieBean.thumbs = Utils.getNetVideoBitmap(Utils.URLList(this)[i])
             mList.add(beanMovieBean)
         }
+
+
+
         mAdapter = RecyclerViewVideoAdapter(this, mList)
         movie_list.adapter = mAdapter
     }
@@ -121,4 +129,19 @@ class MainActivity : AppCompatActivity() {
             delData()
         }
     }
+
+    fun getFilesAllName(path: String): List<String>? {
+        val file = File(path)
+        val files = file.listFiles()
+        if (files == null) {
+            Log.e("error", "空目录")
+            return null
+        }
+        val s = ArrayList<String>()
+        for (i in files!!.indices) {
+            s.add(files!![i].getAbsolutePath())
+        }
+        return s
+    }
+
 }

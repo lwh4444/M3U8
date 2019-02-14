@@ -7,5 +7,5 @@ public interface DownLoadListener {
 
     void onDownloading(String curTs, String totalTs);
 
-    void onEnd();
+    void onEnd(String tips);
 }

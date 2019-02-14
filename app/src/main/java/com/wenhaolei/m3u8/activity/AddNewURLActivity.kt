@@ -43,7 +43,6 @@ class AddNewURLActivity : AppCompatActivity() {
         }
         download_btn.setOnClickListener {
             val intent = Intent(this, DownloadingActivity::class.java)
-            intent.putExtra("url", Utils.URLList(this)[0])
             startActivity(intent)
         }
 

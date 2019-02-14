@@ -105,6 +105,7 @@ public class M3U8DownloadTask {
                     if (netSpeedTimer != null) {
                         netSpeedTimer.cancel();
                     }
+                    curTs = 0;
                     onDownloadListener.onSuccess();
                     break;
             }
@@ -204,10 +205,10 @@ public class M3U8DownloadTask {
                                         @Override
                                         public void run() {
                                             MUtils.clearDir(new File(tempDir));//清空一下临时文件
+                                            mHandler.sendEmptyMessage(WHAT_ON_SUCCESS);
                                         }
                                     }, 5 * 1000);//20s之后再删除
                                 }
-                                mHandler.sendEmptyMessage(WHAT_ON_SUCCESS);
                                 isRunning = false;
                             }
                         } catch (InterruptedIOException e) {
