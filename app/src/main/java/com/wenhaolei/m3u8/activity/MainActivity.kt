@@ -50,7 +50,11 @@ class MainActivity : AppCompatActivity() {
         if (!getFilesAllName(M3U8Params.mp4Savepath).isNullOrEmpty()) {
             for (i in 0 until getFilesAllName(M3U8Params.mp4Savepath)!!.size) {
                 val beanMovieBean = MovieBean()
-                beanMovieBean.url = getFilesAllName(M3U8Params.mp4Savepath)!![i]
+                val urlStr = getFilesAllName(M3U8Params.mp4Savepath)!![i]
+                beanMovieBean.url = urlStr
+                beanMovieBean.title = urlStr.substring(urlStr.lastIndexOf("/") + 1, urlStr.length)
+                //太污了 暂时不加
+//                beanMovieBean.thumbs = Utils.getNetVideoBitmap(urlStr)
                 mList.add(beanMovieBean)
             }
 
@@ -159,8 +163,8 @@ class MainActivity : AppCompatActivity() {
             return null
         }
         val s = ArrayList<String>()
-        for (i in files!!.indices) {
-            s.add(files!![i].getAbsolutePath())
+        for (i in files.indices) {
+            s.add(files[i].absolutePath)
         }
         return s
     }
