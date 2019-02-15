@@ -21,7 +21,9 @@ class DownloadingActivity : AppCompatActivity(), DownLoadListener {
         setContentView(R.layout.activity_download_layout)
         M3U8DownLoadManger.setDownloadListener(this)
         urlList = Utils.URLList(this)
-        M3U8DownLoadManger.onDownload(urlList[position], "100$position");
+        if (urlList.isNullOrEmpty()) {
+            M3U8DownLoadManger.onDownload(urlList[position], "100$position");
+        }
     }
 
     override fun startDownload() {
@@ -41,7 +43,7 @@ class DownloadingActivity : AppCompatActivity(), DownLoadListener {
     }
 
 
-    override fun onEnd(tips:String) {
+    override fun onEnd(tips: String) {
         text.text = tips
         if (position < urlList.size - 1) {
             position++

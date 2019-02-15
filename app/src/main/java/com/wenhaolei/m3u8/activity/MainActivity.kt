@@ -19,6 +19,7 @@ import hdl.com.lib.runtimepermissions.HPermissions
 import hdl.com.lib.runtimepermissions.PermissionsResultAction
 import kotlinx.android.synthetic.main.activity_main.*
 import android.util.Log
+import android.widget.Toast
 import com.wenhaolei.m3u8.bean.M3U8Params
 import java.io.File
 
@@ -34,13 +35,33 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         println(isNetworkConnected(this))
         println(Utils.URLList(this))
-        println(getFilesAllName(M3U8Params.mp4Savepath))
-
+//        println("file:" + (this.getFilesAllName(M3U8Params.mp4Savepath)?.get(0) ?: null))
         requestPermission()
         setUI()
-        delData()
+//        delData()
+        delLocalData()
     }
 
+    /**
+     * 加载本地视频
+     */
+    private fun delLocalData() {
+        mList = ArrayList()
+        if (!getFilesAllName(M3U8Params.mp4Savepath).isNullOrEmpty()) {
+            for (i in 0 until getFilesAllName(M3U8Params.mp4Savepath)!!.size) {
+                val beanMovieBean = MovieBean()
+                beanMovieBean.url = getFilesAllName(M3U8Params.mp4Savepath)!![i]
+                mList.add(beanMovieBean)
+            }
+
+            mAdapter = RecyclerViewVideoAdapter(this, mList)
+            movie_list.adapter = mAdapter
+
+        } else {
+            Toast.makeText(this, "没有文件", Toast.LENGTH_SHORT).show()
+        }
+
+    }
 
     private fun requestPermission() {
         /*
@@ -77,7 +98,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUI() {
-        movie_list.layoutManager = LinearLayoutManager(this)
+        movie_list.layoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager?
         movie_list.addOnChildAttachStateChangeListener(object : RecyclerView.OnChildAttachStateChangeListener {
             override fun onChildViewDetachedFromWindow(p0: View) {
             }
@@ -130,7 +151,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun getFilesAllName(path: String): List<String>? {
+    private fun getFilesAllName(path: String): List<String>? {
         val file = File(path)
         val files = file.listFiles()
         if (files == null) {
